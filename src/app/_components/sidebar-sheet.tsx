@@ -1,33 +1,16 @@
 "use client";
 
-import { Button } from "./ui/button";
-import Image from "next/image";
-import {
-  CalendarIcon,
-  HomeIcon,
-  LogInIcon,
-  LogOutIcon,
-  MenuIcon,
-} from "lucide-react";
-import {
-  SheetContent,
-  SheetTrigger,
-  Sheet,
-  SheetHeader,
-  SheetTitle,
-  SheetClose,
-} from "./ui/sheet";
-import { quickSearchOptions } from "../_constants/search";
-import { Avatar, AvatarImage } from "./ui/avatar";
-import Link from "next/link";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-} from "./ui/dialog";
-import { DialogTitle, DialogTrigger } from "@radix-ui/react-dialog";
+import { DialogTrigger } from "@radix-ui/react-dialog";
+import { CalendarIcon, HomeIcon, LogInIcon, LogOutIcon } from "lucide-react";
 import { signIn, signOut, useSession } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
+import { quickSearchOptions } from "../_constants/search";
+import SignInDialog from "./signin-dialog";
+import { Avatar, AvatarImage } from "./ui/avatar";
+import { Button } from "./ui/button";
+import { Dialog, DialogContent } from "./ui/dialog";
+import { SheetClose, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
 
 const SidebarSheet = () => {
   const { data } = useSession();
@@ -62,26 +45,7 @@ const SidebarSheet = () => {
                 </Button>
               </DialogTrigger>
               <DialogContent className="w-[90%]">
-                <DialogHeader>
-                  <DialogTitle>Faça login na plataforma</DialogTitle>
-                  <DialogDescription>
-                    Conect-se usando sua conta do Google.
-                  </DialogDescription>
-                </DialogHeader>
-
-                <Button
-                  variant={"secondary"}
-                  className="gap-2 font-bold"
-                  onClick={handleLoginWithGoogleClick}
-                >
-                  <Image
-                    src={"/google.svg"}
-                    width={18}
-                    height={18}
-                    alt="Google"
-                  />
-                  Google
-                </Button>
+                <SignInDialog />
               </DialogContent>
             </Dialog>
           </>
