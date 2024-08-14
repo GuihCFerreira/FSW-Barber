@@ -7,8 +7,33 @@ import Search from "./_components/search";
 import { Button } from "./_components/ui/button";
 import { quickSearchOptions } from "./_constants/search";
 import { db } from "./_lib/prisma";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./_lib/auth";
 
 const Home = async () => {
+  const session = await getServerSession(authOptions);
+
+  const booking = session?.user
+    ? await db.booking.findMany({
+        where: {
+          userId: (session?.user as any).id,
+          date: {
+            gte: new Date(),
+          },
+        },
+        orderBy: {
+          date: "asc",
+        },
+        include: {
+          service: {
+            include: {
+              barbershop: true,
+            },
+          },
+        },
+      })
+    : [];
+
   const barbershops = await db.barbershop.findMany({});
   const popularsBarbershops = await db.barbershop.findMany({
     orderBy: {
@@ -62,7 +87,14 @@ const Home = async () => {
         </div>
 
         {/*Agendamento*/}
-        <BookingItem />
+        <h2 className="mt-6 mb-3 text-xs uppercase text-gray-400 font-bold">
+          Agendamentos
+        </h2>
+        <div className="flex">
+          {booking.map((booking) => (
+            <BookingItem booking={booking} key={booking.id} />
+          ))}
+        </div>
 
         {/*Barbearias*/}
         <h2 className="mt-6 mb-3 text-xs uppercase text-gray-400 font-bold">
