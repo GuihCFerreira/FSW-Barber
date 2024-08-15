@@ -1,3 +1,6 @@
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
 import BarbershopItem from "./_components/barbershop-item";
@@ -6,15 +9,14 @@ import Header from "./_components/header";
 import Search from "./_components/search";
 import { Button } from "./_components/ui/button";
 import { quickSearchOptions } from "./_constants/search";
-import { db } from "./_lib/prisma";
-import { getServerSession } from "next-auth";
 import { authOptions } from "./_lib/auth";
+import { db } from "./_lib/prisma";
 
 const Home = async () => {
   const session = await getServerSession(authOptions);
 
   const booking = session?.user
-    ? await db.booking.findMany({
+    ? await db.booking.findFirst({
         where: {
           userId: (session?.user as any).id,
           date: {
@@ -46,8 +48,22 @@ const Home = async () => {
       <Header />
       <div className="p-5">
         {/*Texto*/}
-        <h2 className="text-xl font-bold">Olá, Felipe!</h2>
-        <p>Segunda Feira, 05 de Agosto</p>
+        <h2 className="text-xl font-bold">
+          Olá, {session?.user ? session.user.name : " bem vindo!"}
+        </h2>
+        <p>
+          <span className="capitalize">
+            {format(new Date(), "EEEE, dd ", {
+              locale: ptBR,
+            })}
+          </span>
+          de
+          <span className="capitalize">
+            {format(new Date(), " MMMM", {
+              locale: ptBR,
+            })}
+          </span>
+        </p>
 
         {/*Busca*/}
         <div className="mt-6">
@@ -91,9 +107,7 @@ const Home = async () => {
           Agendamentos
         </h2>
         <div className="flex">
-          {booking.map((booking) => (
-            <BookingItem booking={booking} key={booking.id} />
-          ))}
+          {booking && <BookingItem booking={booking} />}
         </div>
 
         {/*Barbearias*/}
