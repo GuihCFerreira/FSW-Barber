@@ -34,7 +34,7 @@ const Home = async () => {
           },
         },
       })
-    : [];
+    : null;
 
   const barbershops = await db.barbershop.findMany({});
   const popularsBarbershops = await db.barbershop.findMany({
