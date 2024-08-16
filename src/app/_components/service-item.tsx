@@ -23,6 +23,7 @@ import {
   SheetTitle,
 } from "./ui/sheet";
 import BookingSummary from "./booking-summary";
+import { useRouter } from "next/navigation";
 
 const TIME_LIST = [
   "08:00",
@@ -85,6 +86,7 @@ interface ServiceItemProps {
 
 const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
   const { data } = useSession();
+  const router = useRouter();
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined);
   const [selectedTime, setSelectedTime] = useState<String | undefined>(
     undefined,
@@ -145,7 +147,12 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
         date: selectedDate,
       });
       handleBookingSheetOpenChange();
-      toast.success("Reserva criada com sucesso!");
+      toast.success("Reserva criada com sucesso!", {
+        action: {
+          label: "Ver agendamentos",
+          onClick: () => router.push("/bookings"),
+        },
+      });
     } catch (error) {
       console.error(error);
       toast.error("Erro ao criar reserva!");
