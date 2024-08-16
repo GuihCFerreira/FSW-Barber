@@ -16,7 +16,7 @@ const Home = async () => {
   const session = await getServerSession(authOptions);
 
   const booking = session?.user
-    ? await db.booking.findFirst({
+    ? await db.booking.findMany({
         where: {
           userId: (session?.user as any).id,
           date: {
@@ -34,7 +34,7 @@ const Home = async () => {
           },
         },
       })
-    : null;
+    : [];
 
   const barbershops = await db.barbershop.findMany({});
   const popularsBarbershops = await db.barbershop.findMany({
@@ -103,12 +103,19 @@ const Home = async () => {
         </div>
 
         {/*Agendamento*/}
-        <h2 className="mt-6 mb-3 text-xs uppercase text-gray-400 font-bold">
-          Agendamentos
-        </h2>
-        <div className="flex">
-          {booking && <BookingItem booking={booking} />}
-        </div>
+
+        {booking.length > 0 && (
+          <>
+            <h2 className="mt-6 mb-3 text-xs uppercase text-gray-400 font-bold">
+              Agendamentos
+            </h2>
+            <div className="flex gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+              {booking.map((booking) => (
+                <BookingItem key={booking.id} booking={booking} />
+              ))}
+            </div>
+          </>
+        )}
 
         {/*Barbearias*/}
         <h2 className="mt-6 mb-3 text-xs uppercase text-gray-400 font-bold">
