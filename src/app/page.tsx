@@ -11,30 +11,12 @@ import { Button } from "./_components/ui/button";
 import { quickSearchOptions } from "./_constants/search";
 import { authOptions } from "./_lib/auth";
 import { db } from "./_lib/prisma";
+import { getConfirmedBookings } from "./_data/get-confirmed-bookings";
 
 const Home = async () => {
   const session = await getServerSession(authOptions);
 
-  const booking = session?.user
-    ? await db.booking.findMany({
-        where: {
-          userId: (session?.user as any).id,
-          date: {
-            gte: new Date(),
-          },
-        },
-        orderBy: {
-          date: "asc",
-        },
-        include: {
-          service: {
-            include: {
-              barbershop: true,
-            },
-          },
-        },
-      })
-    : [];
+  const booking = await getConfirmedBookings();
 
   const barbershops = await db.barbershop.findMany({});
   const popularsBarbershops = await db.barbershop.findMany({

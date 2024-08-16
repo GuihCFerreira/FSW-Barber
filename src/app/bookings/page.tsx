@@ -7,6 +7,8 @@ import { db } from "../_lib/prisma";
 import { Dialog, DialogContent } from "../_components/ui/dialog";
 import SignInDialog from "../_components/signin-dialog";
 import DialogLogin from "../_components/dialog-login";
+import { getConfirmedBookings } from "../_data/get-confirmed-bookings";
+import { getConcludedBookings } from "../_data/get-concluded-bookings";
 
 const Bookings = async () => {
   const session = await getServerSession(authOptions);
@@ -14,43 +16,9 @@ const Bookings = async () => {
     return <DialogLogin />;
   }
 
-  const confirmedBookings = await db.booking.findMany({
-    where: {
-      userId: (session?.user as any).id,
-      date: {
-        gte: new Date(),
-      },
-    },
-    orderBy: {
-      date: "asc",
-    },
-    include: {
-      service: {
-        include: {
-          barbershop: true,
-        },
-      },
-    },
-  });
+  const confirmedBookings = await getConfirmedBookings();
 
-  const concludedBookings = await db.booking.findMany({
-    where: {
-      userId: (session?.user as any).id,
-      date: {
-        lt: new Date(),
-      },
-    },
-    orderBy: {
-      date: "asc",
-    },
-    include: {
-      service: {
-        include: {
-          barbershop: true,
-        },
-      },
-    },
-  });
+  const concludedBookings = await getConcludedBookings();
 
   return (
     <>
