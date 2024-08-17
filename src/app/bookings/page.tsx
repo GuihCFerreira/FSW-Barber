@@ -9,6 +9,7 @@ import SignInDialog from "../_components/signin-dialog";
 import DialogLogin from "../_components/dialog-login";
 import { getConfirmedBookings } from "../_data/get-confirmed-bookings";
 import { getConcludedBookings } from "../_data/get-concluded-bookings";
+import SessionTitle from "../_components/session-title";
 
 const Bookings = async () => {
   const session = await getServerSession(authOptions);
@@ -28,9 +29,7 @@ const Bookings = async () => {
 
         {confirmedBookings.length > 0 && (
           <>
-            <h2 className="mt-6 mb-3 text-xs uppercase text-gray-400 font-bold">
-              Confirmados
-            </h2>
+            <SessionTitle title="Confirmados" />
             {confirmedBookings.map((booking) => (
               <BookingItem
                 key={booking.id}
@@ -42,9 +41,7 @@ const Bookings = async () => {
 
         {concludedBookings.length > 0 && (
           <>
-            <h2 className="mt-6 mb-3 text-xs uppercase text-gray-400 font-bold">
-              Finalizados
-            </h2>
+            <SessionTitle title="Finalizados" />
             {concludedBookings.map((booking) => (
               <BookingItem
                 key={booking.id}

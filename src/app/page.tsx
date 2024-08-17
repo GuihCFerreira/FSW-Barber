@@ -12,6 +12,7 @@ import { quickSearchOptions } from "./_constants/search";
 import { authOptions } from "./_lib/auth";
 import { db } from "./_lib/prisma";
 import { getConfirmedBookings } from "./_data/get-confirmed-bookings";
+import SessionTitle from "./_components/session-title";
 
 const Home = async () => {
   const session = await getServerSession(authOptions);
@@ -88,9 +89,7 @@ const Home = async () => {
 
         {booking.length > 0 && (
           <>
-            <h2 className="mt-6 mb-3 text-xs uppercase text-gray-400 font-bold">
-              Agendamentos
-            </h2>
+            <SessionTitle title="Agendamentos" />
             <div className="flex gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
               {booking.map((booking) => (
                 <BookingItem
@@ -103,9 +102,7 @@ const Home = async () => {
         )}
 
         {/*Barbearias*/}
-        <h2 className="mt-6 mb-3 text-xs uppercase text-gray-400 font-bold">
-          Recomendados
-        </h2>
+        <SessionTitle title="Recomendados" />
         <div className="flex gap-4 overflow-auto  [&::-webkit-scrollbar]:hidden">
           {barbershops.map((barbershop) => (
             <BarbershopItem key={barbershop.id} barbershop={barbershop} />
@@ -113,9 +110,7 @@ const Home = async () => {
         </div>
 
         {/*Populares*/}
-        <h2 className="mt-6 mb-3 text-xs uppercase text-gray-400 font-bold">
-          Recomendados
-        </h2>
+        <SessionTitle title="Populares" />
         <div className="flex gap-4 overflow-auto  [&::-webkit-scrollbar]:hidden">
           {popularsBarbershops.map((popularBarbershop) => (
             <BarbershopItem
