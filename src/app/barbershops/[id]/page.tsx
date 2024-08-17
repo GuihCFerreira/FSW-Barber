@@ -3,6 +3,7 @@ import ServiceItem from "@/app/_components/service-item";
 import SidebarSheet from "@/app/_components/sidebar-sheet";
 import { Button } from "@/app/_components/ui/button";
 import { Sheet, SheetTrigger } from "@/app/_components/ui/sheet";
+import { getBarbershopById } from "@/app/_data/get-barbershop-by-id";
 import { db } from "@/app/_lib/prisma";
 import {
   ChevronLeftIcon,
@@ -22,14 +23,7 @@ interface BarbershopPageProps {
 }
 
 const BarbershopPage = async ({ params }: BarbershopPageProps) => {
-  const barbershop = await db.barbershop.findUnique({
-    where: {
-      id: params.id,
-    },
-    include: {
-      services: true,
-    },
-  });
+  const barbershop = await getBarbershopById(params);
 
   if (!barbershop) return notFound();
 
