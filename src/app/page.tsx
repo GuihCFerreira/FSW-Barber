@@ -7,12 +7,12 @@ import BarbershopItem from "./_components/barbershop-item";
 import BookingItem from "./_components/booking-item";
 import Header from "./_components/header";
 import Search from "./_components/search";
+import SessionTitle from "./_components/session-title";
 import { Button } from "./_components/ui/button";
 import { quickSearchOptions } from "./_constants/search";
+import { getConfirmedBookings } from "./_data/get-confirmed-bookings";
 import { authOptions } from "./_lib/auth";
 import { db } from "./_lib/prisma";
-import { getConfirmedBookings } from "./_data/get-confirmed-bookings";
-import SessionTitle from "./_components/session-title";
 
 const Home = async () => {
   const session = await getServerSession(authOptions);
@@ -49,7 +49,7 @@ const Home = async () => {
         </p>
 
         {/*Busca*/}
-        <div className="mt-6">
+        <div className="mt-6 md:hidden ">
           <Search />
         </div>
 

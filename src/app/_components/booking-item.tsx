@@ -7,21 +7,15 @@ import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
 import { deleteBooking } from "../_actions/delete-booking";
+import BookingSummary from "./booking-summary";
+import CancelBookingDialog from "./cancel-booking-dialog";
 import PhoneItem from "./phone-item";
+import RatingDialog from "./rating-dialog";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "./ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import {
   Sheet,
   SheetClose,
@@ -30,7 +24,6 @@ import {
   SheetHeader,
   SheetTrigger,
 } from "./ui/sheet";
-import BookingSummary from "./booking-summary";
 
 interface BookingItemProps {
   booking: Prisma.BookingGetPayload<{
@@ -161,40 +154,31 @@ const BookingItem = ({ booking }: BookingItemProps) => {
                   Voltar
                 </Button>
               </SheetClose>
-              {isConfirmed && (
-                <Dialog>
-                  <DialogTrigger asChild className="w-full">
-                    <Button variant={"destructive"} className="w-full">
-                      Cancelar Reserva
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="w-[90%]">
-                    <DialogHeader>
-                      <DialogTitle> Você quer cancelar a reserva?</DialogTitle>
-                      <DialogDescription>
-                        Tem certeza que deseja realizar o cancelamento da sua
-                        reserva? Essa ação é irreversível.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter className="flex flex-row gap-3">
-                      <DialogClose asChild>
-                        <Button variant={"secondary"} className="w-full">
-                          Voltar
-                        </Button>
-                      </DialogClose>
-                      <DialogClose asChild>
-                        <Button
-                          variant={"destructive"}
-                          className="w-full"
-                          onClick={handleCancelBooking}
-                        >
-                          Confirmar
-                        </Button>
-                      </DialogClose>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-              )}
+              <Dialog>
+                <DialogTrigger asChild className="w-full">
+                  <Button
+                    variant={isConfirmed ? "destructive" : "default"}
+                    className="w-full"
+                  >
+                    {isConfirmed ? "Cancelar Reserva" : "Avaliar"}
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="w-[90%]">
+                  {isConfirmed ? (
+                    <CancelBookingDialog
+                      booking={booking}
+                      key={booking.id}
+                      setIsSheetOpen={setIsSheetOpen}
+                    />
+                  ) : (
+                    <RatingDialog
+                      barbershop={barbershop}
+                      key={barbershop.id}
+                      setIsSheetOpen={setIsSheetOpen}
+                    />
+                  )}
+                </DialogContent>
+              </Dialog>
             </div>
           </SheetFooter>
         </SheetContent>
