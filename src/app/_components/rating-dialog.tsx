@@ -1,6 +1,7 @@
 import { Barbershop } from "@prisma/client";
 import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "sonner";
+import { saveRating } from "../_actions/save-rating";
 import RatingStar from "./rating-stars";
 import { Button } from "./ui/button";
 import {
@@ -18,8 +19,16 @@ interface RatingDialogProps {
 
 const RatingDialog = ({ barbershop, setIsSheetOpen }: RatingDialogProps) => {
   const [rating, setRating] = useState(0);
+
   const handleRatingBarbershop = async () => {
     try {
+      if (rating == 0) return;
+
+      await saveRating({
+        barbershopId: barbershop.id,
+        value: rating,
+      });
+
       setIsSheetOpen(false);
       toast.success("Avaliação registrada com sucesso!");
     } catch (error) {
