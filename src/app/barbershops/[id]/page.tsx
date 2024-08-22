@@ -4,14 +4,8 @@ import SidebarSheet from "@/app/_components/sidebar-sheet";
 import { Button } from "@/app/_components/ui/button";
 import { Sheet, SheetTrigger } from "@/app/_components/ui/sheet";
 import { getBarbershopById } from "@/app/_data/get-barbershop-by-id";
-import { db } from "@/app/_lib/prisma";
-import {
-  ChevronLeftIcon,
-  MapPinIcon,
-  MenuIcon,
-  SmartphoneIcon,
-  StarIcon,
-} from "lucide-react";
+import { getBarbershopRating } from "@/app/_data/get-barbershop-rating";
+import { ChevronLeftIcon, MapPinIcon, MenuIcon, StarIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -24,6 +18,7 @@ interface BarbershopPageProps {
 
 const BarbershopPage = async ({ params }: BarbershopPageProps) => {
   const barbershop = await getBarbershopById(params);
+  const barbershopRating = await getBarbershopRating(params);
 
   if (!barbershop) return notFound();
 
@@ -72,7 +67,10 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
 
         <div className="flex items-center gap-2">
           <StarIcon className="text-primary fill-primary" size={18} />
-          <p className="text-sn">5,0 (499 Avaliações)</p>
+          <p className="text-sn">
+            {barbershopRating.rating} ({barbershopRating.totalRatings}{" "}
+            Avaliações)
+          </p>
         </div>
       </div>
 

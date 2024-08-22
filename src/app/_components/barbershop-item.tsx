@@ -1,10 +1,11 @@
 import { Barbershop } from "@prisma/client";
-import { Card, CardContent } from "./ui/card";
-import Image from "next/image";
-import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
 import { StarIcon } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+import { getBarbershopRating } from "../_data/get-barbershop-rating";
+import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
+import { Card, CardContent } from "./ui/card";
 
 /*interface BarbershopPropsI {
     id: string,
@@ -20,7 +21,9 @@ interface BarbershopProps {
   barbershop: Barbershop;
 }
 
-const BarbershopItem = ({ barbershop }: BarbershopProps) => {
+const BarbershopItem = async ({ barbershop }: BarbershopProps) => {
+  const rating = await getBarbershopRating(barbershop);
+
   return (
     <Card className="min-w-[167px] rounded-2xl">
       <CardContent className="p-0 px-1 pt-1">
@@ -37,7 +40,7 @@ const BarbershopItem = ({ barbershop }: BarbershopProps) => {
             variant="secondary"
           >
             <StarIcon size={12} className="fill-primary text-primary" />
-            <p className="text-xs font-semibold">5,0</p>
+            <p className="text-xs font-semibold">{rating.rating}</p>
           </Badge>
         </div>
 

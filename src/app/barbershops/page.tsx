@@ -3,7 +3,6 @@ import Header from "../_components/header";
 import Search from "../_components/search";
 import SessionTitle from "../_components/session-title";
 import { getBarbershopsByNameOrService } from "../_data/get-barbershops-by-name-or-service";
-import { db } from "../_lib/prisma";
 
 interface BarbershopsPageProps {
   searchParams: {

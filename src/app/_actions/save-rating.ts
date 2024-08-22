@@ -20,4 +20,5 @@ export const saveRating = async (params: SaveRatingParams) => {
     },
   });
   revalidatePath("/bookings");
+  revalidatePath("/barbershop/{id}");
 };
