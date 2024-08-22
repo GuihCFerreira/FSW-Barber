@@ -18,6 +18,7 @@ model User {
   bookings      Booking[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  ratings       Rating[]
 }
 
 model Account {
@@ -69,6 +70,7 @@ model Barbershop {
   createdAt   DateTime            @default(now())
   updatedAt   DateTime            @updatedAt
   services    BarbershopService[]
+  ratings     Rating[]
 }
 
 model BarbershopService {
@@ -91,4 +93,13 @@ model Booking {
   date      DateTime
   createdAd DateTime          @default(now())
   updatedAt DateTime          @updatedAt
+}
+
+model Rating {
+  id           String     @id @default(cuid())
+  userId       String
+  user         User       @relation(fields: [userId], references: [id])
+  barbershopId String
+  barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
+  value        Int
 }
